@@ -1,0 +1,35 @@
+
+/* Add a vertical margin between columns */
+/* .row.row-grid [class*="col-"] + [class*="col-"] {
+    margin-top: 5px;
+} */
+/* Automatically remove margin if no preceeding column exist. */
+/* .row.row-grid [class*="col-"] + [class*="col-"] {
+    margin-top: 5px;
+} */
+
+/* Removes spacing if no preceeding column exist */
+/* @media (min-width: 1200px) {
+    .row.row-grid [class*="col-lg-"] + [class*="col-lg-"] {
+        margin-top: 0;
+    }
+}
+@media (min-width: 992px) {
+    .row.row-grid [class*="col-md-"] + [class*="col-md-"] {
+        margin-top: 0;
+    }
+}
+@media (min-width: 768px) {
+    .row.row-grid [class*="col-sm-"] + [class*="col-sm-"] {
+        margin-top: 0;
+    }
+} */
+
+/* .row-grid + .row-grid {
+    margin-top: 15px;
+} */
+
+/* Add a vertical margin between rows when row-space class is used. */
+.row.row-margin + .row.row-margin {
+    margin-top: 5px;
+}

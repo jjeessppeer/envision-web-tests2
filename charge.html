@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="no.css">
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
+  <script>let $ = require('jquery');</script>
+  <script>require('popper.js');</script>
+  <script>require('bootstrap');</script>
+
+  
+</head>
+<body>
+
+  <div class="container">
+    <div class="row row-margin">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroupFileAddon01">Select VASP directory</span>
+          </div>
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" webkitdirectory onchange="">
+            <!-- <input type="text"> -->
+            <label class="custom-file-label" for="inputGroupFile01">Choose directory</label>
+          </div>
+        </div>
+    </div>
+  </div>
+
+
+  <!-- File selector component -->
+  <div class="container">
+    <div class="row row-margin">
+      <!-- <div class="col-sm-4"> -->
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="sourceRadios" id="sourceRadiosVASP" value="option1" onclick="console.log($('#sourceRadiosHDF5').prop('checked'))" checked>
+          <!-- <label class="form-check-label" for="sourceRadiosVASP">Load VASP directory:</label> -->
+        </div>
+      <!-- </div> -->
+      <div class="col-sm">
+        <!-- <input type="text" class="form-control" id="vaspPath"> -->
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroupFileAddon01">Select VASP directory</span>
+          </div>
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="vaspFileInput" aria-describedby="inputGroupFileAddon01" webkitdirectory>
+            <label class="custom-file-label" for="vaspFileInput">Choose directory</label>
+          </div>
+        </div>
+      </div>
+      </div>
+      
+      <div class="row row-margin">
+          <div class="col-sm-4">
+            Save to HDF5 file (optional):
+          </div>
+          <div class="col-sm">
+              <input type="text" class="form-control" id="hdfSavePath" Disabled>
+          </div>
+      </div>
+      <div class="row row-margin">
+        <div class="col-sm-4">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="sourceRadios" id="sourceRadiosHDF5" value="option1" onclick="console.log($('#sourceRadiosHDF5').prop('checked'))">
+            Load HDF5 file:
+            <!-- <label class="form-check-label" for="sourceRadiosHDF5">Load HDF5 file:</label> -->
+          </div>
+        </div>
+        <div class="col-sm">
+            <input type="text" class="form-control" id="hdfLoadPath">
+        </div>
+      </div>
+  </div>
+  
+  
+  <script>
+      // $('#sourceRadiosHDF5').prop('checked', true);
+      // console.log($('#sourceRadiosHDF5').prop('checked'));
+      // console.log("HELLOL");
+      $(".custom-file-input").on("change", function() {
+        //var fileName = $(this).val()//.split("\\").pop();
+        //var fileName = document.getElementById("vaspFileInput").files[0].fileName;
+        var dirPath =  $(this)[0].files[0].path;
+        console.log(dirPath)
+        // var file = $(this);
+        // console.log(file)
+        // console.log(file[0])
+        // console.log(file[0].files)
+        // console.log(file[0].files.path)
+        // console.log(file[0].files[0].path)
+      });
+  </script>
+
+    
+</body>
+</html>

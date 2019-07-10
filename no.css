@@ -30,6 +30,10 @@
 } */
 
 /* Add a vertical margin between rows when row-space class is used. */
-.row.row-margin + .row.row-margin {
+/* .row.row-margin + .row.row-margin {
     margin-top: 5px;
+} */
+
+.row.row-margin{
+    margin-bottom: 5px;
 }

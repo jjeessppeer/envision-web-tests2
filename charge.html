@@ -27,7 +27,7 @@
   <div class="container-fluid border-bottom" >
     <h4>Select data source</h4>
     <div class="form-check">
-      <label class="form-check-label">
+      <label class="form-check-label" for="vaspSourceCheckbox">
         <input type="radio" class="form-check-input" id="vaspSourceCheckbox" name="sourceSelection" onclick="togglePathType()" checked>VASP directory
       </label>
     </div>
@@ -83,15 +83,63 @@
       </div>
     </div>
     <div style="margin-bottom:5px">
-        <button type="button" class="btn btn-primary">Start visualisation</button>
-        <button type="button" class="btn btn-secondary">Stop visualisation</button>
+      <button type="button" class="btn btn-primary">Start visualisation</button>
+      <button type="button" class="btn btn-secondary">Stop visualisation</button>
+    </div>
+  </div>
+
+  <div class="container-fluid border-bottom">
+    <h5>General settings</h5>
+    <div class="row row-margin">
+      <div class="input-group col-sm-6">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="bandSelection">Selected band</label>
+        </div>
+        <select class="custom-select" id="bandSelection" onchange="bandSelected()">
+          <option selected>final</option>
+          <option>1</option>
+        </select>
+      </div>
     </div>
   </div>
 
   <div class="container-fluid">
-    <h4>Volume Controls</h4>
-  </div>
+    <h5>Volume Rendering settings</h5>
+    <div class="row row-margin">
+      <div class="input-group col-sm-6">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="shadingModeSelection">Shading mode</label>
+        </div>
+        <select class="custom-select" id="shadingModeSelection" onchange="bandSelected()">
+          <option selected>No shading</option>
+          <option>Blinn Phong</option>
+        </select>
+      </div>
+    </div>
+    <h6>Transfer Function</h6>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="transperancyCheckbox" onclick="console.log('Transperancy toggled')">
+      <label class="form-check-label" for="transperancyCheckbox">Transperancy before first point</label>
+    </div>
+    
+    <div class="row row-margin">
+      <form class="col-sm-6" id="tfAdder">
+        <div class="input-group" id="addTFGroup">
+          <input type="text" class="form-control" placeholder="value [0-1]" id="tfValue">
+          <input type="text" class="form-control" placeholder="alpha [0-1]" id="tfAlpha">
+          <input class="form-control" type="color" value="#563d7c">
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="button" onclick="addTFPoint()">+</button>
+          </div>
+        </div>
+      </form>
 
+
+
+    </div>
+
+
+  </div>
 
   
   <script>
@@ -129,6 +177,59 @@
       }
       togglePathType()
       togglePathType()
+
+      function bandSelected(){
+        var selection = $("#inputBandSelection").val()
+        console.log(selection)
+        // Add selection like this
+        // $("#inputBandSelection").append($("<option></option>").text("new element"))
+      }
+
+      function addTFPoint(){
+        const inputGroup = $("#addTFGroup")[0].childNodes;
+        const valueInput = inputGroup[1];
+        const alphaInput = inputGroup[3];
+        const colorInput = inputGroup[5];
+        console.log(valueInput.value)
+        console.log(alphaInput.value)
+        console.log(colorInput.value)
+        // console.log(valueInput.val())
+        // console.log(alphaInput.val())
+        // console.log(colorInput.val())
+        
+        
+        // const value = $("#tfValue");
+        // console.log(value.val())
+        
+        // const form = $("#tfAdder")
+        // console.log(form)
+        // console.log(form[0])
+        // console.log(form[0][0])
+        // console.log(form[0][0].value)
+
+      }
+
+      // Restricts input for each element in the set of matched elements to the given inputFilter.
+      $.fn.inputFilter = function(inputFilter) {
+        return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
+          if (inputFilter(this.value)) {
+            this.oldValue = this.value;
+            this.oldSelectionStart = this.selectionStart;
+            this.oldSelectionEnd = this.selectionEnd;
+          } else if (this.hasOwnProperty("oldValue")) {
+            this.value = this.oldValue;
+            this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+          }
+        });
+      };
+
+      // Restrict input to digits by using a regular expression filter.
+      $("#tfValue").inputFilter(function(value) {
+        return /^(0(\.\d*)?|1(\.0+)?)?$/.test(value) //float in range 0 to 1, or nothing.
+      });
+      $("#tfAlpha").inputFilter(function(value) {
+        return /^(0(\.\d*)?|1(\.0+)?)?$/.test(value) //float in range 0 to 1, or nothing.
+      });
   </script>
 
     

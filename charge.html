@@ -122,25 +122,22 @@
       <label class="form-check-label" for="transperancyCheckbox">Transperancy before first point</label>
     </div>
     
-    <div class="row row-margin">
-      <form class="col-sm-6" id="tfAdder">
-        <div class="input-group" id="addTFGroup">
-          <input type="text" class="form-control" placeholder="value [0-1]" id="tfValue">
-          <input type="text" class="form-control" placeholder="alpha [0-1]" id="tfAlpha">
-          <input class="form-control" type="color" value="#563d7c">
-          <div class="input-group-append">
-            <button class="btn btn-primary" type="button" onclick="addTFPoint()">+</button>
+    <div id="tfPoints">
+      <div class="row row-margin">
+        <form class="needs-validation col-sm-6" id="tfAdder" novalidate>
+          <div class="input-group" id="addTFGroup">
+            <input type="text" class="form-control" placeholder="value [0-1]" id="tfValue" required>
+            <input type="text" class="form-control" placeholder="alpha [0-1]" id="tfAlpha" required>
+            <input class="form-control" type="color" value="#563d7c" required>
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="submit">+</button>
+            </div>
           </div>
-        </div>
-      </form>
-
-
-
+        </form>
+      </div>
     </div>
 
-
   </div>
-
   
   <script>
       // $('#sourceRadiosHDF5').prop('checked', true);
@@ -159,6 +156,7 @@
         // console.log(file[0].files.path)
         // console.log(file[0].files[0].path)
       });
+
       $("#vaspSource").css("display", "block")
       function togglePathType(){
         var vaspDiv = $("#vaspSource")
@@ -184,6 +182,50 @@
         // Add selection like this
         // $("#inputBandSelection").append($("<option></option>").text("new element"))
       }
+      
+      $("#tfAdder").on("submit", function(){
+        // Validate input first
+        if ($(this)[0].checkValidity() === false){
+          event.preventDefault();
+          event.stopPropagation();
+          //Adds indications of what input is invalid.
+          $(this).addClass('was-validated');
+          return false
+        }
+        
+        // Removes validity symbols if input accepted
+        $(this).removeClass("was-validated")
+
+        const valueInput = $(this)[0][0].value;
+        const alphaInput = $(this)[0][1].value;
+        const colorInput = $(this)[0][2].value
+        console.log(valueInput)
+        console.log(alphaInput)
+        console.log(colorInput)
+        //TODO test if all are decently valid
+        
+        // Add a new element for the added point.
+        // This is not pretty.
+        $("#tfPoints").prepend(
+          '<div class="row row-margin">' +
+            '<form class="col-sm-6" name="tfPoint">' +
+              '<div class="input-group">' +
+                '<input type="text" class="form-control" value="'+valueInput+'" disabled>' +
+                '<input type="text" class="form-control" value="'+alphaInput+'" disabled>' +
+                '<input class="form-control" type="color" value="'+colorInput+'" disabled>' +
+                '<div class="input-group-append">' +
+                  '<button class="btn btn-primary" type="submit">-</button>' +
+                '</div>' +
+              '</div>' +
+            '</form>' +
+          '</div>')
+        return false; //Return false to stop page from reloading
+      });
+
+      $('[name="tfPoint"]').on("submit", function(){
+        console.log("- pressed")
+        return false;
+      });
 
       function addTFPoint(){
         const inputGroup = $("#addTFGroup")[0].childNodes;
@@ -193,6 +235,9 @@
         console.log(valueInput.value)
         console.log(alphaInput.value)
         console.log(colorInput.value)
+
+
+
         // console.log(valueInput.val())
         // console.log(alphaInput.val())
         // console.log(colorInput.val())
@@ -206,6 +251,9 @@
         // console.log(form[0])
         // console.log(form[0][0])
         // console.log(form[0][0].value)
+      }
+
+      function buildTfElement(){
 
       }
 
@@ -225,10 +273,10 @@
 
       // Restrict input to digits by using a regular expression filter.
       $("#tfValue").inputFilter(function(value) {
-        return /^(0(\.\d*)?|1(\.0+)?)?$/.test(value) //float in range 0 to 1, or nothing.
+        return /^(0?(\.\d*)?|1(\.0*)?)?$/.test(value) //float in range 0 to 1, or nothing.
       });
       $("#tfAlpha").inputFilter(function(value) {
-        return /^(0(\.\d*)?|1(\.0+)?)?$/.test(value) //float in range 0 to 1, or nothing.
+        return /^(0?(\.\d*)?|1(\.0*)?)?$/.test(value) //float in range 0 to 1, or nothing.
       });
   </script>
 

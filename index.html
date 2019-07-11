@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Bootstrap Example</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="no.css">
   <!-- <link rel="stylesheet" href="tabs.css"> -->
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -12,196 +14,35 @@
   <script>let $ = require('jquery');</script>
   <script>require('popper.js');</script>
   <script>require('bootstrap');</script>
+  <script src="eventCallbacks.js"></script>
 </head>
+
 <body>
 
-  <!-- <div class="tab">
-    <button class="tablinks" id="defaultOpen" onclick="openCity(event, 'London')">London</button>
-    <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
-    <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
-  </div>
-  
-  <div id="London" class="tabcontent">
-    <h3>London</h3>
-    <p>London is the capital city of England.</p>
-  </div>
-  
-  <div id="Paris" class="tabcontent">
-    <h3>Paris</h3>
-    <p>Paris is the capital of France.</p>
-  </div>
-  
-  <div id="Tokyo" class="tabcontent">
-    <h3>Tokyo</h3>
-    <p>Tokyo is the capital of Japan.</p>
-  </div>  -->
-
   <div class="container-fluid">
-      <div id=fileLoadWrapper></div>
-      <div id="pageContentWrapper"></div>
+    <div id=fileLoadWrapper></div>
+    <div id="pageContentWrapper"></div>
   </div>
 
 
   <script>
-      $("#fileLoadWrapper").load("loadInput.html")
-      $("#pageContentWrapper").load("chargeSettings.html")
-      $(document).ready(function(){
+    $("#fileLoadWrapper").load("loadInput.html")
+    $("#pageContentWrapper").load("chargeControlPanel.html")
+    $(document).ready(function () {
       
-
       // Bind events
-      $(".custom-file-input").on("change", function () {
-        //var fileName = $(this).val()//.split("\\").pop();
-        //var fileName = document.getElementById("vaspFileInput").files[0].fileName;
-        var filePath = $(this)[0].files[0].path;
-        $(this).next('.custom-file-label').addClass("selected").html(filePath);
-        console.log(filePath)
-      });
-  
+      $(".custom-file-input").on("change", pathInputChanged);
+
       $("#vaspSource").css("display", "block")
-      function togglePathType() {
-        var vaspDiv = $("#vaspSource")
-        var hdf5Div = $("#hdf5Source")
-  
-        if ($("#vaspSourceCheckbox").is(":checked")) {
-          console.log("Showing vasp")
-          vaspDiv.css("display", "block")
-          hdf5Div.css("display", "none")
-        }
-        else if ($("#hdf5SourceCheckbox").is(":checked")) {
-          console.log("Hiding vasp")
-          vaspDiv.css("display", "none")
-          hdf5Div.css("display", "block")
-        }
-      }
-      togglePathType()
-      togglePathType()
-  
-      function bandSelected() {
-        var selection = $("#inputBandSelection").val()
-        console.log(selection)
-        // Add selection like this
-        // $("#inputBandSelection").append($("<option></option>").text("new element"))
-      }
-  
-      $("#tfAdder").on("submit", function () {
-        // Validate input first
-        if ($(this)[0].checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-          //Adds indications of what input is invalid.
-          $(this).addClass('was-validated');
-          return false
-        }
-  
-        // Removes validity symbols if input accepted
-        $(this).removeClass("was-validated")
-  
-        const valueInput = parseFloat($(this)[0][0].value);
-        const alphaInput = parseFloat($(this)[0][1].value);
-        const colorInput = $(this)[0][2].value
-        console.log(valueInput)
-        console.log(alphaInput)
-        console.log(colorInput)
-        //TODO test if all are decently valid
-  
-        // Add a new element for the added point.
-        // This is not pretty.
-        let elementString = (
-          '<div class="row row-margin">' +
-          '<form class="col-sm-8" name="tfPoint">' +
-          '<div class="input-group">' +
-          '<input type="text" class="form-control" value="' + valueInput + '" disabled>' +
-          '<input type="text" class="form-control" value="' + alphaInput + '" disabled>' +
-          '<input class="form-control" type="color" value="' + colorInput + '" disabled>' +
-          '<div class="input-group-append">' +
-          '<button class="btn btn-primary" type="submit">-</button>' +
-          '</div>' +
-          '</div>' +
-          '</form>' +
-          '</div>');
-        // $("#tfPoints").prepend(elementString);
-  
-  
-        console.log("ALL POINTS:");
-        // console.log($("#tfPoints"));
-        // console.log($("#tfPoints")[0]);
-        // console.log($("#tfPoints")[0].children);
-  
-        // Insert new element at correct index
-        let inserted = false;
-        let insertionIndex = 0;
-        let tfPoints = [[valueInput, alphaInput, colorInput]]
-        for (let i = 0; i < $("#tfPoints")[0].children.length; i++) {
-          let formNode = $("#tfPoints")[0].children[i].children[0];
-          if (formNode.getAttribute("id") == "tfAdder") {
-            continue;
-          }
-  
-          let formValue = parseFloat(formNode.children[0].children[0].value);
-          let formAlpha = parseFloat(formNode.children[0].children[1].value);
-          let formColor = formNode.children[0].children[2].value;
-          tfPoints.push([formValue, formAlpha, formColor]);
-  
-          if (valueInput == formValue) {
-            insertionIndex = -2;
-            break;
-          }
-          if (valueInput < formValue && !inserted) {
-            insertionIndex = i;
-            inserted = true;
-          }
-        }
-        console.log(JSON.stringify(tfPoints))
-        if (insertionIndex == -2) {
-          // TODO: Set invalid input
-          console.log("Point with that value already exist.")
-        }
-        // else if (insertionIndex == -1)
-        //   $("#tfPoints").prepend(elementString);
-        else {
-          let rowNode = $("#tfPoints")[0].children[insertionIndex];
-          // tfPoints.splice(insertionIndex, 0, )
-          $(elementString).insertBefore($(rowNode))
-        }
-  
-        return false; //Return false to stop page from reloading
-      });
-  
-      $('[name="tfPoint"]').on("submit", function () {
-        console.log("- pressed")
-        return false;
-      });
-  
-      function addTFPoint() {
-        const inputGroup = $("#addTFGroup")[0].childNodes;
-        const valueInput = inputGroup[1];
-        const alphaInput = inputGroup[3];
-        const colorInput = inputGroup[5];
-        console.log(valueInput.value)
-        console.log(alphaInput.value)
-        console.log(colorInput.value)
-  
-  
-  
-        // console.log(valueInput.val())
-        // console.log(alphaInput.val())
-        // console.log(colorInput.val())
-  
-  
-        // const value = $("#tfValue");
-        // console.log(value.val())
-  
-        // const form = $("#tfAdder")
-        // console.log(form)
-        // console.log(form[0])
-        // console.log(form[0][0])
-        // console.log(form[0][0].value)
-      }
-  
-      function buildTfElement() {
-  
-      }
-  
+      $("#vaspSourceCheckbox").on("change", togglePathType)
+      $("#hdf5SourceCheckbox").on("change", togglePathType)
+
+
+      $("#bandSelection").on("change", bandSelected)
+      $("#shadingModeSelection").on("change", shadingModeSelected)
+
+      $("#tfAdder").on("submit", addTfPoint);
+
       // Restricts input for each element in the set of matched elements to the given inputFilter.
       $.fn.inputFilter = function (inputFilter) {
         return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
@@ -215,18 +56,18 @@
           }
         });
       };
-  
+
       // Restrict input to digits by using a regular expression filter.
       $("#tfValue").inputFilter(function (value) {
-        return /^(0?(\.\d*)?|1(\.0*)?)?$/.test(value) //float in range 0 to 1, or nothing.
+        return /^(0?(\.\d*)?|1(\.0*)?)?$/.test(value) //allow float in range 0 to 1, or nothing.
       });
       $("#tfAlpha").inputFilter(function (value) {
-        return /^(0?(\.\d*)?|1(\.0*)?)?$/.test(value) //float in range 0 to 1, or nothing.
+        return /^(0?(\.\d*)?|1(\.0*)?)?$/.test(value) //allow float in range 0 to 1, or nothing.
       });
-      console.log("scriptos donezo")
-      });
-    </script>
+    });
+  </script>
 
 
 </body>
+
 </html>

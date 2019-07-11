@@ -5,7 +5,7 @@
     <div class="input-group-prepend">
       <label class="input-group-text" for="bandSelection">Selected band</label>
     </div>
-    <select class="custom-select" id="bandSelection" onchange="bandSelected()">
+    <select class="custom-select" id="bandSelection">
       <option selected>final</option>
       <option>1</option>
     </select>
@@ -18,7 +18,7 @@
     <div class="input-group-prepend">
       <label class="input-group-text" for="shadingModeSelection">Shading mode</label>
     </div>
-    <select class="custom-select" id="shadingModeSelection" onchange="bandSelected()">
+    <select class="custom-select" id="shadingModeSelection"">
       <option selected>No shading</option>
       <option>Blinn Phong</option>
     </select>
@@ -50,7 +50,7 @@
         <input type="text" class="form-control" placeholder="alpha [0-1]" id="tfAlpha" required>
         <input class="form-control" type="color" value="#563d7c" required>
         <div class="input-group-append">
-          <button class="btn btn-primary" type="submit">+</button>
+          <button class="btn btn-primary" type="submit" id="tfAddButton">+</button>
         </div>
       </div>
     </form>
@@ -63,3 +63,10 @@
     <button type="button" class="btn btn-secondary">Load transfer funciton</button>
   </div>
 </div>
+
+
+<!-- <script>
+    $(document).ready(function(){
+      console.log("Charge comp loaded")
+    });
+</script> -->

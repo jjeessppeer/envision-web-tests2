@@ -65,8 +65,35 @@
 </div>
 
 
-<!-- <script>
+<script>
     $(document).ready(function(){
-      console.log("Charge comp loaded")
+      console.log("Charge control element loaded")
+      $("#bandSelection").on("change", bandSelected)
+      $("#shadingModeSelection").on("change", shadingModeSelected)
+
+      $("#tfAdder").on("submit", addTfPoint);
+
+      // Restricts input for each element in the set of matched elements to the given inputFilter.
+      $.fn.inputFilter = function (inputFilter) {
+        return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
+          if (inputFilter(this.value)) {
+            this.oldValue = this.value;
+            this.oldSelectionStart = this.selectionStart;
+            this.oldSelectionEnd = this.selectionEnd;
+          } else if (this.hasOwnProperty("oldValue")) {
+            this.value = this.oldValue;
+            this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+          }
+        });
+      };
+
+      // Restrict input to digits by using a regular expression filter.
+      $("#tfValue").inputFilter(function (value) {
+        return /^(0?(\.\d*)?|1(\.0*)?)?$/.test(value) //allow float in range 0 to 1, or nothing.
+      });
+      $("#tfAlpha").inputFilter(function (value) {
+        return /^(0?(\.\d*)?|1(\.0*)?)?$/.test(value) //allow float in range 0 to 1, or nothing.
+      });
+
     });
-</script> -->
+</script>

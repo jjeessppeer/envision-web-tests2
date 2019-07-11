@@ -37,7 +37,6 @@ function shadingModeSelected() {
 
 
 function addTfPoint() {
-    console.log("wa")
     // Validate input first
     if ($(this)[0].checkValidity() === false) {
         event.preventDefault();
@@ -53,9 +52,7 @@ function addTfPoint() {
     const valueInput = parseFloat($(this)[0][0].value);
     const alphaInput = parseFloat($(this)[0][1].value);
     const colorInput = $(this)[0][2].value
-    console.log(valueInput)
-    console.log(alphaInput)
-    console.log(colorInput)
+    console.log(JSON.stringify([valueInput, alphaInput, colorInput]))
     //TODO test if all are decently valid
 
     // Add a new element for the added point.
@@ -113,11 +110,8 @@ function addTfPoint() {
 }
 
 function removeTfPoint() {
-    console.log("- pressed")
-    console.log($(this));
-    console.log($(this).parent());
-
+    console.log("Removing point");
     $(this).parent().remove();
-    return false
+    return false;
 }
 

@@ -104,9 +104,9 @@
   </div>
 
   <div class="container-fluid border-bottom">
-    <h5>Volume Rendering settings</h5>
+    <h5>Volume rendering settings</h5>
     <div class="row row-margin">
-      <div class="input-group col-sm-6">
+      <div class="input-group col-sm-7">
         <div class="input-group-prepend">
           <label class="input-group-text" for="shadingModeSelection">Shading mode</label>
         </div>
@@ -115,6 +115,17 @@
           <option>Blinn Phong</option>
         </select>
       </div>
+    </div>
+    <div class="form-row row-margin input-group">
+      <div class="input-group-prepend col-sm-2">
+        <label class="input-group-text">Background</label>
+      </div>
+      <input class="form-control col-sm-1" id="backgroundColor1" type="color" value="#ffffff" required>
+      <input class="form-control col-sm-1" id="backgroundColor2" type="color" value="#000000" required>
+      <select class="custom-select col-sm-3" id="backgroundStyleSelection" onchange="console.log('bg style selected')">
+        <option selected>Linear gradient</option>
+        <option>other option</option>
+      </select>
     </div>
     <h6>Transfer Function</h6>
     <div class="form-check">
@@ -194,6 +205,26 @@
       </div>
     </div>
   </div>
+
+  
+<!-- 
+  <div class="container-fluid border-bottom">
+    <h5>Volume background</h5>
+    <div class="row row-margin">
+      <div class="input-group">
+        <div class="input-group-prepend col-sm-2">
+          <label class="input-group-text">Background</label>
+        </div>
+        <input class="form-control col-sm-1" id="backgroundColor1" type="color" value="#ffffff" required>
+        <input class="form-control col-sm-1" id="backgroundColor2" type="color" value="#000000" required>
+        <select class="custom-select col-sm-4" id="backgroundStyleSelection" onchange="console.log('bg style selected')">
+          <option selected>Linear gradient</option>
+          <option>other option</option>
+        </select>
+      </div>
+    </div>
+
+  </div> -->
   
   <script>
       $(".custom-file-input").on("change", function() {

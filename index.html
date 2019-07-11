@@ -36,53 +36,197 @@
     <p>Tokyo is the capital of Japan.</p>
   </div>  -->
 
-  
-
-  <div class="embed-responsive embed-responsive-4by3">
-    <iframe class="embed-responsive-item" src="charge.html"></iframe>
+  <div class="container-fluid">
+      <div id=fileLoadWrapper></div>
+      <div id="pageContentWrapper"></div>
   </div>
-  <!-- <iframe height="300px" width="100%" src="demo_iframe.htm" name="iframe_a"></iframe>
 
-  <p><a href="charge.html" target="iframe_a">charge</a></p> -->
 
-  <!-- <script>
-    function openCity(evt, cityName) {
-      var i, tabcontent, tablinks;
-      tabcontent = document.getElementsByClassName("tabcontent");
-      for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
+  <script>
+      $("#fileLoadWrapper").load("loadInput.html")
+      $("#pageContentWrapper").load("chargeSettings.html")
+      $(document).ready(function(){
+      
+
+      // Bind events
+      $(".custom-file-input").on("change", function () {
+        //var fileName = $(this).val()//.split("\\").pop();
+        //var fileName = document.getElementById("vaspFileInput").files[0].fileName;
+        var filePath = $(this)[0].files[0].path;
+        $(this).next('.custom-file-label').addClass("selected").html(filePath);
+        console.log(filePath)
+      });
+  
+      $("#vaspSource").css("display", "block")
+      function togglePathType() {
+        var vaspDiv = $("#vaspSource")
+        var hdf5Div = $("#hdf5Source")
+  
+        if ($("#vaspSourceCheckbox").is(":checked")) {
+          console.log("Showing vasp")
+          vaspDiv.css("display", "block")
+          hdf5Div.css("display", "none")
+        }
+        else if ($("#hdf5SourceCheckbox").is(":checked")) {
+          console.log("Hiding vasp")
+          vaspDiv.css("display", "none")
+          hdf5Div.css("display", "block")
+        }
       }
-      tablinks = document.getElementsByClassName("tablinks");
-      for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      togglePathType()
+      togglePathType()
+  
+      function bandSelected() {
+        var selection = $("#inputBandSelection").val()
+        console.log(selection)
+        // Add selection like this
+        // $("#inputBandSelection").append($("<option></option>").text("new element"))
       }
-      document.getElementById(cityName).style.display = "block";
-      evt.currentTarget.className += " active";
-    }
-    
-    // Get the element with id="defaultOpen" and click on it
-    document.getElementById("defaultOpen").click();
-    </script> -->
+  
+      $("#tfAdder").on("submit", function () {
+        // Validate input first
+        if ($(this)[0].checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+          //Adds indications of what input is invalid.
+          $(this).addClass('was-validated');
+          return false
+        }
+  
+        // Removes validity symbols if input accepted
+        $(this).removeClass("was-validated")
+  
+        const valueInput = parseFloat($(this)[0][0].value);
+        const alphaInput = parseFloat($(this)[0][1].value);
+        const colorInput = $(this)[0][2].value
+        console.log(valueInput)
+        console.log(alphaInput)
+        console.log(colorInput)
+        //TODO test if all are decently valid
+  
+        // Add a new element for the added point.
+        // This is not pretty.
+        let elementString = (
+          '<div class="row row-margin">' +
+          '<form class="col-sm-8" name="tfPoint">' +
+          '<div class="input-group">' +
+          '<input type="text" class="form-control" value="' + valueInput + '" disabled>' +
+          '<input type="text" class="form-control" value="' + alphaInput + '" disabled>' +
+          '<input class="form-control" type="color" value="' + colorInput + '" disabled>' +
+          '<div class="input-group-append">' +
+          '<button class="btn btn-primary" type="submit">-</button>' +
+          '</div>' +
+          '</div>' +
+          '</form>' +
+          '</div>');
+        // $("#tfPoints").prepend(elementString);
+  
+  
+        console.log("ALL POINTS:");
+        // console.log($("#tfPoints"));
+        // console.log($("#tfPoints")[0]);
+        // console.log($("#tfPoints")[0].children);
+  
+        // Insert new element at correct index
+        let inserted = false;
+        let insertionIndex = 0;
+        let tfPoints = [[valueInput, alphaInput, colorInput]]
+        for (let i = 0; i < $("#tfPoints")[0].children.length; i++) {
+          let formNode = $("#tfPoints")[0].children[i].children[0];
+          if (formNode.getAttribute("id") == "tfAdder") {
+            continue;
+          }
+  
+          let formValue = parseFloat(formNode.children[0].children[0].value);
+          let formAlpha = parseFloat(formNode.children[0].children[1].value);
+          let formColor = formNode.children[0].children[2].value;
+          tfPoints.push([formValue, formAlpha, formColor]);
+  
+          if (valueInput == formValue) {
+            insertionIndex = -2;
+            break;
+          }
+          if (valueInput < formValue && !inserted) {
+            insertionIndex = i;
+            inserted = true;
+          }
+        }
+        console.log(JSON.stringify(tfPoints))
+        if (insertionIndex == -2) {
+          // TODO: Set invalid input
+          console.log("Point with that value already exist.")
+        }
+        // else if (insertionIndex == -1)
+        //   $("#tfPoints").prepend(elementString);
+        else {
+          let rowNode = $("#tfPoints")[0].children[insertionIndex];
+          // tfPoints.splice(insertionIndex, 0, )
+          $(elementString).insertBefore($(rowNode))
+        }
+  
+        return false; //Return false to stop page from reloading
+      });
+  
+      $('[name="tfPoint"]').on("submit", function () {
+        console.log("- pressed")
+        return false;
+      });
+  
+      function addTFPoint() {
+        const inputGroup = $("#addTFGroup")[0].childNodes;
+        const valueInput = inputGroup[1];
+        const alphaInput = inputGroup[3];
+        const colorInput = inputGroup[5];
+        console.log(valueInput.value)
+        console.log(alphaInput.value)
+        console.log(colorInput.value)
+  
+  
+  
+        // console.log(valueInput.val())
+        // console.log(alphaInput.val())
+        // console.log(colorInput.val())
+  
+  
+        // const value = $("#tfValue");
+        // console.log(value.val())
+  
+        // const form = $("#tfAdder")
+        // console.log(form)
+        // console.log(form[0])
+        // console.log(form[0][0])
+        // console.log(form[0][0].value)
+      }
+  
+      function buildTfElement() {
+  
+      }
+  
+      // Restricts input for each element in the set of matched elements to the given inputFilter.
+      $.fn.inputFilter = function (inputFilter) {
+        return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
+          if (inputFilter(this.value)) {
+            this.oldValue = this.value;
+            this.oldSelectionStart = this.selectionStart;
+            this.oldSelectionEnd = this.selectionEnd;
+          } else if (this.hasOwnProperty("oldValue")) {
+            this.value = this.oldValue;
+            this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+          }
+        });
+      };
+  
+      // Restrict input to digits by using a regular expression filter.
+      $("#tfValue").inputFilter(function (value) {
+        return /^(0?(\.\d*)?|1(\.0*)?)?$/.test(value) //float in range 0 to 1, or nothing.
+      });
+      $("#tfAlpha").inputFilter(function (value) {
+        return /^(0?(\.\d*)?|1(\.0*)?)?$/.test(value) //float in range 0 to 1, or nothing.
+      });
+      console.log("scriptos donezo")
+      });
+    </script>
 
 
-<!-- Nav pills
-<ul class="nav  flex-column">
-  <li class="nav-item">
-    <a class="nav-link active" data-toggle="pill" href="home.html">Home</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" data-toggle="pill" href="home.html">Menu 1</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" data-toggle="pill" href="home.html">Menu 2</a>
-  </li>
-</ul> -->
-
-<!-- Tab panes -->
-<!-- <div class="tab-content">
-  <div class="tab-pane container active" id="home">HOME</div>
-  <div class="tab-pane container fade" id="menu1">MENU1</div>
-  <div class="tab-pane container fade" id="menu2">MENU2</div>
-</div> -->
 </body>
 </html>

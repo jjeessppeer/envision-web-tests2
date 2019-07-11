@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Bootstrap Example</title>
   <meta charset="utf-8">
@@ -13,82 +14,21 @@
   <script>require('popper.js');</script>
   <script>require('bootstrap');</script>
 
-  
+
 </head>
+
 <body>
-
-
 
 
   <!-- 
     Source file selector component. Checkbox is used to hide and show the "vaspSource" and "hdf5Source" blocks.
     Only vaspSource is shown by default. 
   -->
-  <div class="container-fluid border-bottom" >
-    <h4>Select data source</h4>
-    <div class="form-check">
-      <label class="form-check-label" for="vaspSourceCheckbox">
-        <input type="radio" class="form-check-input" id="vaspSourceCheckbox" name="sourceSelection" onclick="togglePathType()" checked>VASP directory
-      </label>
-    </div>
-    <div class="form-check">
-      <label class="form-check-label">
-        <input type="radio" class="form-check-input" id="hdf5SourceCheckbox" name="sourceSelection" onclick="togglePathType()">HDF5 file
-      </label>
-    </div>
-    <div id="vaspSource" style="display:block">
-      <div class="row row-margin">
-          <div class="input-group col-md-8">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="vaspLoadSpan">Load VASP directory</span>
-            </div>
-            <div class="custom-file">
-              <input type="file" class="custom-file-input" id="vaspLoadInput" aria-describedby="vaspLoadSpan" webkitdirectory onchange="">
-              <label class="custom-file-label" for="vaspLoadInput">Choose directory</label>
-            </div>
-          </div>
-      </div>
-      <label>Save parsed HDF5 file (optional)</label>
-      <div class="row row-margin">
-        <div class="input-group col-md-8">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="hdf5FileNamePrep">HDF5 file name</span>
-          </div>
-          <input type="text" class="form-control" id="hdf5FileNameInput" aria-describedby="hdf5FileNamePrep" placeholder="example.hdf5">
-        </div>
-      </div>
-      <div class="row row-margin">
-        <div class="input-group col-md-8">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="hdfSaveSpan">Save parsed HDF5 file to</span>
-          </div>
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" id="hdfSaveInput" aria-describedby="hdfSaveSpan" webkitdirectory onchange="">
-            <label class="custom-file-label" for="hdfSaveInput">Choose directory</label>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="hdf5Source" style="display:none">
-      <div class="row row-margin">
-          <div class="input-group col-md-8">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="hdf5LoadSpan">Load HDF5 file</span>
-            </div>
-            <div class="custom-file">
-              <input type="file" class="custom-file-input" id="hdf5LoadInput" aria-describedby="hdf5LoadSpan" webkitdirectory onchange="">
-              <label class="custom-file-label" for="hdf5LoadInput">Choose directory</label>
-            </div>
-          </div>
-      </div>
-    </div>
-    <div style="margin-bottom:5px">
-      <button type="button" class="btn btn-primary">Start visualisation</button>
-      <button type="button" class="btn btn-secondary">Stop visualisation</button>
-    </div>
-  </div>
+  <div class="container-fluid">
 
-  <div class="container-fluid border-bottom">
+    <div id=loaderContainer></div>
+
+    <!-- Settings panel -->
     <h5>General settings</h5>
     <div class="row row-margin">
       <div class="input-group col-sm-6">
@@ -101,9 +41,63 @@
         </select>
       </div>
     </div>
+
+    <h5 class="border-bottom">Volume rendering settings</h5>
+    <div class="row row-margin">
+      <div class="input-group col-sm-7">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="shadingModeSelection">Shading mode</label>
+        </div>
+        <select class="custom-select" id="shadingModeSelection" onchange="bandSelected()">
+          <option selected>No shading</option>
+          <option>Blinn Phong</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row row-margin input-group">
+      <div class="input-group-prepend col-sm-2">
+        <label class="input-group-text">Background</label>
+      </div>
+      <input class="form-control col-sm-1" id="backgroundColor1" type="color" value="#ffffff" required>
+      <input class="form-control col-sm-1" id="backgroundColor2" type="color" value="#000000" required>
+      <select class="custom-select col-sm-3" id="backgroundStyleSelection" onchange="console.log('bg style selected')">
+        <option selected>Linear gradient</option>
+        <option>other option</option>
+      </select>
+    </div>
+    <h6>Transfer Function</h6>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="transperancyCheckbox" onclick="console.log('Transperancy toggled')"
+        checked>
+      <label class="form-check-label" for="transperancyCheckbox">Toggle transperancy before first point</label>
+    </div>
+
+    <div id="tfPoints">
+      <div class="row row-margin">
+        <form class="needs-validation col-sm-7" id="tfAdder" novalidate>
+          <div class="input-group" id="addTFGroup">
+            <input type="text" class="form-control" placeholder="value [0-1]" id="tfValue" required>
+            <input type="text" class="form-control" placeholder="alpha [0-1]" id="tfAlpha" required>
+            <input class="form-control" type="color" value="#563d7c" required>
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="submit">+</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="row row-margin">
+      <div class="btn-group col-sm-7" role="group" aria-label="transferSave">
+        <button type="button" class="btn btn-secondary">Save transfer funciton</button>
+        <button type="button" class="btn btn-secondary">Load transfer funciton</button>
+      </div>
+    </div>
+
+
   </div>
 
-  <div class="container-fluid border-bottom">
+  <!-- <div class="container-fluid border-bottom">
     <h5>Volume rendering settings</h5>
     <div class="row row-margin">
       <div class="input-group col-sm-7">
@@ -129,10 +123,11 @@
     </div>
     <h6>Transfer Function</h6>
     <div class="form-check">
-      <input type="checkbox" class="form-check-input" id="transperancyCheckbox" onclick="console.log('Transperancy toggled')" checked>
+      <input type="checkbox" class="form-check-input" id="transperancyCheckbox" onclick="console.log('Transperancy toggled')"
+        checked>
       <label class="form-check-label" for="transperancyCheckbox">Toggle transperancy before first point</label>
     </div>
-    
+
     <div id="tfPoints">
       <div class="row row-margin">
         <form class="needs-validation col-sm-8" id="tfAdder" novalidate>
@@ -157,18 +152,19 @@
 
   </div>
 
-  
+
   <div class="container-fluid border-bottom">
     <h5>Slice plane</h5>
     <div class="form-check">
-      <input type="checkbox" class="form-check-input" id="sliceCanvasCheck" onclick="console.log('sliceCanvasToggle')" checked>
+      <input type="checkbox" class="form-check-input" id="sliceCanvasCheck" onclick="console.log('sliceCanvasToggle')"
+        checked>
       <label class="form-check-label" for="sliceCanvasCheck">Toggle slice rendering</label>
     </div>
     <div class="form-check">
       <input type="checkbox" class="form-check-input" id="slicePlaneCheck" onclick="console.log('slicePlaneToggle')">
       <label class="form-check-label" for="slicePlaneCheck">Toggle slice plane in volume</label>
     </div>
-      
+
     <h6>Slice plane normal</h6>
     <div class="row row-margin">
       <form class="input-group col-sm-4" id="sliceNormalForm">
@@ -178,11 +174,11 @@
         <div class="input-group-append">
           <button class="btn btn-primary" type="submit">&#x2713</button>
         </div>
-      </div>
     </div>
   </div>
+  </div>
 
-  
+
   <div class="container-fluid border-bottom">
     <h5>Atom rendering</h5>
     <div class="form-check">
@@ -199,15 +195,15 @@
         </div>
         <div class="col-sm-4">
           <div class="form-group">
-              <input type="range" class="form-control-range" id="formControlRange">
+            <input type="range" class="form-control-range" id="formControlRange">
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
-  
-<!-- 
+
+  <!-- 
   <div class="container-fluid border-bottom">
     <h5>Volume background</h5>
     <div class="row row-margin">
@@ -225,184 +221,189 @@
     </div>
 
   </div> -->
-  
+
   <script>
-      $(".custom-file-input").on("change", function() {
-        //var fileName = $(this).val()//.split("\\").pop();
-        //var fileName = document.getElementById("vaspFileInput").files[0].fileName;
-        var filePath =  $(this)[0].files[0].path;
-        $(this).next('.custom-file-label').addClass("selected").html(filePath); 
-        console.log(filePath)
-      });
 
-      $("#vaspSource").css("display", "block")
-      function togglePathType(){
-        var vaspDiv = $("#vaspSource")
-        var hdf5Div = $("#hdf5Source")
+    $("#loaderContainer").load("loadInput.html")
 
-        if ($("#vaspSourceCheckbox").is(":checked")){
-          console.log("Showing vasp")
-          vaspDiv.css("display", "block")
-          hdf5Div.css("display", "none")
+    $(".custom-file-input").on("change", function () {
+      //var fileName = $(this).val()//.split("\\").pop();
+      //var fileName = document.getElementById("vaspFileInput").files[0].fileName;
+      var filePath = $(this)[0].files[0].path;
+      $(this).next('.custom-file-label').addClass("selected").html(filePath);
+      console.log(filePath)
+    });
+
+    $("#vaspSource").css("display", "block")
+    function togglePathType() {
+      var vaspDiv = $("#vaspSource")
+      var hdf5Div = $("#hdf5Source")
+
+      if ($("#vaspSourceCheckbox").is(":checked")) {
+        console.log("Showing vasp")
+        vaspDiv.css("display", "block")
+        hdf5Div.css("display", "none")
+      }
+      else if ($("#hdf5SourceCheckbox").is(":checked")) {
+        console.log("Hiding vasp")
+        vaspDiv.css("display", "none")
+        hdf5Div.css("display", "block")
+      }
+    }
+    togglePathType()
+    togglePathType()
+
+    function bandSelected() {
+      var selection = $("#inputBandSelection").val()
+      console.log(selection)
+      // Add selection like this
+      // $("#inputBandSelection").append($("<option></option>").text("new element"))
+    }
+
+    $("#tfAdder").on("submit", function () {
+      // Validate input first
+      if ($(this)[0].checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+        //Adds indications of what input is invalid.
+        $(this).addClass('was-validated');
+        return false
+      }
+
+      // Removes validity symbols if input accepted
+      $(this).removeClass("was-validated")
+
+      const valueInput = parseFloat($(this)[0][0].value);
+      const alphaInput = parseFloat($(this)[0][1].value);
+      const colorInput = $(this)[0][2].value
+      console.log(valueInput)
+      console.log(alphaInput)
+      console.log(colorInput)
+      //TODO test if all are decently valid
+
+      // Add a new element for the added point.
+      // This is not pretty.
+      let elementString = (
+        '<div class="row row-margin">' +
+        '<form class="col-sm-7" name="tfPoint">' +
+        '<div class="input-group">' +
+        '<input type="text" class="form-control" value="' + valueInput + '" disabled>' +
+        '<input type="text" class="form-control" value="' + alphaInput + '" disabled>' +
+        '<input class="form-control" type="color" value="' + colorInput + '" disabled>' +
+        '<div class="input-group-append">' +
+        '<button class="btn btn-primary" type="submit">-</button>' +
+        '</div>' +
+        '</div>' +
+        '</form>' +
+        '</div>');
+      // $("#tfPoints").prepend(elementString);
+
+
+      console.log("ALL POINTS:");
+      // console.log($("#tfPoints"));
+      // console.log($("#tfPoints")[0]);
+      // console.log($("#tfPoints")[0].children);
+
+      // Insert new element at correct index
+      let inserted = false;
+      let insertionIndex = 0;
+      let tfPoints = [[valueInput, alphaInput, colorInput]]
+      for (let i = 0; i < $("#tfPoints")[0].children.length; i++) {
+        let formNode = $("#tfPoints")[0].children[i].children[0];
+        if (formNode.getAttribute("id") == "tfAdder") {
+          continue;
         }
-        else if ($("#hdf5SourceCheckbox").is(":checked")){
-          console.log("Hiding vasp")
-          vaspDiv.css("display", "none")
-          hdf5Div.css("display", "block")
+
+        let formValue = parseFloat(formNode.children[0].children[0].value);
+        let formAlpha = parseFloat(formNode.children[0].children[1].value);
+        let formColor = formNode.children[0].children[2].value;
+        tfPoints.push([formValue, formAlpha, formColor]);
+
+        if (valueInput == formValue) {
+          insertionIndex = -2;
+          break;
+        }
+        if (valueInput < formValue && !inserted) {
+          insertionIndex = i;
+          inserted = true;
         }
       }
-      togglePathType()
-      togglePathType()
-
-      function bandSelected(){
-        var selection = $("#inputBandSelection").val()
-        console.log(selection)
-        // Add selection like this
-        // $("#inputBandSelection").append($("<option></option>").text("new element"))
+      console.log(JSON.stringify(tfPoints))
+      if (insertionIndex == -2) {
+        // TODO: Set invalid input
+        console.log("Point with that value already exist.")
       }
-      
-      $("#tfAdder").on("submit", function(){
-        // Validate input first
-        if ($(this)[0].checkValidity() === false){
-          event.preventDefault();
-          event.stopPropagation();
-          //Adds indications of what input is invalid.
-          $(this).addClass('was-validated');
-          return false
+      // else if (insertionIndex == -1)
+      //   $("#tfPoints").prepend(elementString);
+      else {
+        let rowNode = $("#tfPoints")[0].children[insertionIndex];
+        // tfPoints.splice(insertionIndex, 0, )
+        // $(elementString).insertBefore($(rowNode))
+        $("#tfPoints").prepend(elementString);
+      }
+
+      return false; //Return false to stop page from reloading
+    });
+
+    $('[name="tfPoint"]').on("submit", function () {
+      console.log("- pressed")
+      return false;
+    });
+
+    function addTFPoint() {
+      const inputGroup = $("#addTFGroup")[0].childNodes;
+      const valueInput = inputGroup[1];
+      const alphaInput = inputGroup[3];
+      const colorInput = inputGroup[5];
+      console.log(valueInput.value)
+      console.log(alphaInput.value)
+      console.log(colorInput.value)
+
+
+
+      // console.log(valueInput.val())
+      // console.log(alphaInput.val())
+      // console.log(colorInput.val())
+
+
+      // const value = $("#tfValue");
+      // console.log(value.val())
+
+      // const form = $("#tfAdder")
+      // console.log(form)
+      // console.log(form[0])
+      // console.log(form[0][0])
+      // console.log(form[0][0].value)
+    }
+
+    function buildTfElement() {
+
+    }
+
+    // Restricts input for each element in the set of matched elements to the given inputFilter.
+    $.fn.inputFilter = function (inputFilter) {
+      return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
+        if (inputFilter(this.value)) {
+          this.oldValue = this.value;
+          this.oldSelectionStart = this.selectionStart;
+          this.oldSelectionEnd = this.selectionEnd;
+        } else if (this.hasOwnProperty("oldValue")) {
+          this.value = this.oldValue;
+          this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
         }
-        
-        // Removes validity symbols if input accepted
-        $(this).removeClass("was-validated")
-
-        const valueInput = parseFloat($(this)[0][0].value);
-        const alphaInput = parseFloat($(this)[0][1].value);
-        const colorInput = $(this)[0][2].value
-        console.log(valueInput)
-        console.log(alphaInput)
-        console.log(colorInput)
-        //TODO test if all are decently valid
-        
-        // Add a new element for the added point.
-        // This is not pretty.
-        let elementString = (
-          '<div class="row row-margin">' +
-              '<form class="col-sm-6" name="tfPoint">' +
-                '<div class="input-group">' +
-                  '<input type="text" class="form-control" value="'+valueInput+'" disabled>' +
-                  '<input type="text" class="form-control" value="'+alphaInput+'" disabled>' +
-                  '<input class="form-control" type="color" value="'+colorInput+'" disabled>' +
-                  '<div class="input-group-append">' +
-                    '<button class="btn btn-primary" type="submit">-</button>' +
-                  '</div>' +
-                '</div>' +
-              '</form>' +
-            '</div>');
-        // $("#tfPoints").prepend(elementString);
-
-
-          console.log("ALL POINTS:");
-          // console.log($("#tfPoints"));
-          // console.log($("#tfPoints")[0]);
-          // console.log($("#tfPoints")[0].children);
-
-          // Insert new element at correct index
-          let inserted = false;
-          let insertionIndex = 0;
-          let tfPoints = [[valueInput, alphaInput, colorInput]]
-          for (let i = 0; i < $("#tfPoints")[0].children.length; i++) {
-            let formNode = $("#tfPoints")[0].children[i].children[0];
-            if (formNode.getAttribute("id") == "tfAdder"){
-              continue;
-            }
-
-            let formValue = parseFloat(formNode.children[0].children[0].value);
-            let formAlpha = parseFloat(formNode.children[0].children[1].value);
-            let formColor = formNode.children[0].children[2].value;
-            tfPoints.push([formValue, formAlpha, formColor]);
-
-            if (valueInput == formValue){
-              insertionIndex = -2;
-              break;
-            }
-            if (valueInput < formValue && !inserted){
-              insertionIndex = i;
-              inserted = true;
-            }
-          }
-          console.log(JSON.stringify(tfPoints))
-          if (insertionIndex == -2){
-            // TODO: Set invalid input
-            console.log("Point with that value already exist.")
-          }
-          // else if (insertionIndex == -1)
-          //   $("#tfPoints").prepend(elementString);
-          else{
-            let rowNode = $("#tfPoints")[0].children[insertionIndex];
-            // tfPoints.splice(insertionIndex, 0, )
-            $(elementString).insertBefore($(rowNode))
-          }
-          
-        return false; //Return false to stop page from reloading
       });
+    };
 
-      $('[name="tfPoint"]').on("submit", function(){
-        console.log("- pressed")
-        return false;
-      });
-
-      function addTFPoint(){
-        const inputGroup = $("#addTFGroup")[0].childNodes;
-        const valueInput = inputGroup[1];
-        const alphaInput = inputGroup[3];
-        const colorInput = inputGroup[5];
-        console.log(valueInput.value)
-        console.log(alphaInput.value)
-        console.log(colorInput.value)
-
-
-
-        // console.log(valueInput.val())
-        // console.log(alphaInput.val())
-        // console.log(colorInput.val())
-        
-        
-        // const value = $("#tfValue");
-        // console.log(value.val())
-        
-        // const form = $("#tfAdder")
-        // console.log(form)
-        // console.log(form[0])
-        // console.log(form[0][0])
-        // console.log(form[0][0].value)
-      }
-
-      function buildTfElement(){
-
-      }
-
-      // Restricts input for each element in the set of matched elements to the given inputFilter.
-      $.fn.inputFilter = function(inputFilter) {
-        return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
-          if (inputFilter(this.value)) {
-            this.oldValue = this.value;
-            this.oldSelectionStart = this.selectionStart;
-            this.oldSelectionEnd = this.selectionEnd;
-          } else if (this.hasOwnProperty("oldValue")) {
-            this.value = this.oldValue;
-            this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-          }
-        });
-      };
-
-      // Restrict input to digits by using a regular expression filter.
-      $("#tfValue").inputFilter(function(value) {
-        return /^(0?(\.\d*)?|1(\.0*)?)?$/.test(value) //float in range 0 to 1, or nothing.
-      });
-      $("#tfAlpha").inputFilter(function(value) {
-        return /^(0?(\.\d*)?|1(\.0*)?)?$/.test(value) //float in range 0 to 1, or nothing.
-      });
+    // Restrict input to digits by using a regular expression filter.
+    $("#tfValue").inputFilter(function (value) {
+      return /^(0?(\.\d*)?|1(\.0*)?)?$/.test(value) //float in range 0 to 1, or nothing.
+    });
+    $("#tfAlpha").inputFilter(function (value) {
+      return /^(0?(\.\d*)?|1(\.0*)?)?$/.test(value) //float in range 0 to 1, or nothing.
+    });
   </script>
 
-    
+
 </body>
+
 </html>

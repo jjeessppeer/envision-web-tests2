@@ -103,7 +103,7 @@
     </div>
   </div>
 
-  <div class="container-fluid">
+  <div class="container-fluid border-bottom">
     <h5>Volume Rendering settings</h5>
     <div class="row row-margin">
       <div class="input-group col-sm-6">
@@ -124,7 +124,7 @@
     
     <div id="tfPoints">
       <div class="row row-margin">
-        <form class="needs-validation col-sm-6" id="tfAdder" novalidate>
+        <form class="needs-validation col-sm-8" id="tfAdder" novalidate>
           <div class="input-group" id="addTFGroup">
             <input type="text" class="form-control" placeholder="value [0-1]" id="tfValue" required>
             <input type="text" class="form-control" placeholder="alpha [0-1]" id="tfAlpha" required>
@@ -137,6 +137,62 @@
       </div>
     </div>
 
+    <div class="row row-margin">
+      <div class="btn-group col-sm-8" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary">Save transfer funciton</button>
+        <button type="button" class="btn btn-secondary">Load transfer funciton</button>
+      </div>
+    </div>
+
+  </div>
+
+  
+  <div class="container-fluid border-bottom">
+    <h5>Slice plane</h5>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="sliceCanvasCheck" onclick="console.log('sliceCanvasToggle')" checked>
+      <label class="form-check-label" for="sliceCanvasCheck">Toggle slice rendering</label>
+    </div>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="slicePlaneCheck" onclick="console.log('slicePlaneToggle')">
+      <label class="form-check-label" for="slicePlaneCheck">Toggle slice plane in volume</label>
+    </div>
+      
+    <h6>Slice plane normal</h6>
+    <div class="row row-margin">
+      <form class="input-group col-sm-4" id="sliceNormalForm">
+        <input type="text" class="form-control" placeholder="x" required>
+        <input type="text" class="form-control" placeholder="y" required>
+        <input type="text" class="form-control" placeholder="z" required>
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="submit">&#x2713</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="container-fluid border-bottom">
+    <h5>Atom rendering</h5>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" onclick="console.log('Atom spheres toggled')" checked>
+      <label class="form-check-label">Toggle atom position rendering</label>
+    </div>
+    <div id="radiusInputs">
+      <div class="row row-margin">
+        <div class="col-sm-3">
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" onclick="console.log('sliceCanvasToggle')" checked>
+            <label class="form-check-label">Sodium radius</label>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+              <input type="range" class="form-control-range" id="formControlRange">
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   
   <script>

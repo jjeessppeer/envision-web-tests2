@@ -118,8 +118,8 @@
     </div>
     <h6>Transfer Function</h6>
     <div class="form-check">
-      <input type="checkbox" class="form-check-input" id="transperancyCheckbox" onclick="console.log('Transperancy toggled')">
-      <label class="form-check-label" for="transperancyCheckbox">Transperancy before first point</label>
+      <input type="checkbox" class="form-check-input" id="transperancyCheckbox" onclick="console.log('Transperancy toggled')" checked>
+      <label class="form-check-label" for="transperancyCheckbox">Toggle transperancy before first point</label>
     </div>
     
     <div id="tfPoints">
@@ -140,21 +140,12 @@
   </div>
   
   <script>
-      // $('#sourceRadiosHDF5').prop('checked', true);
-      // console.log($('#sourceRadiosHDF5').prop('checked'));
-      // console.log("HELLOL");
       $(".custom-file-input").on("change", function() {
         //var fileName = $(this).val()//.split("\\").pop();
         //var fileName = document.getElementById("vaspFileInput").files[0].fileName;
         var filePath =  $(this)[0].files[0].path;
         $(this).next('.custom-file-label').addClass("selected").html(filePath); 
         console.log(filePath)
-        // var file = $(this);
-        // console.log(file)
-        // console.log(file[0])
-        // console.log(file[0].files)
-        // console.log(file[0].files.path)
-        // console.log(file[0].files[0].path)
       });
 
       $("#vaspSource").css("display", "block")
@@ -196,8 +187,8 @@
         // Removes validity symbols if input accepted
         $(this).removeClass("was-validated")
 
-        const valueInput = $(this)[0][0].value;
-        const alphaInput = $(this)[0][1].value;
+        const valueInput = parseFloat($(this)[0][0].value);
+        const alphaInput = parseFloat($(this)[0][1].value);
         const colorInput = $(this)[0][2].value
         console.log(valueInput)
         console.log(alphaInput)
@@ -206,19 +197,64 @@
         
         // Add a new element for the added point.
         // This is not pretty.
-        $("#tfPoints").prepend(
+        let elementString = (
           '<div class="row row-margin">' +
-            '<form class="col-sm-6" name="tfPoint">' +
-              '<div class="input-group">' +
-                '<input type="text" class="form-control" value="'+valueInput+'" disabled>' +
-                '<input type="text" class="form-control" value="'+alphaInput+'" disabled>' +
-                '<input class="form-control" type="color" value="'+colorInput+'" disabled>' +
-                '<div class="input-group-append">' +
-                  '<button class="btn btn-primary" type="submit">-</button>' +
+              '<form class="col-sm-6" name="tfPoint">' +
+                '<div class="input-group">' +
+                  '<input type="text" class="form-control" value="'+valueInput+'" disabled>' +
+                  '<input type="text" class="form-control" value="'+alphaInput+'" disabled>' +
+                  '<input class="form-control" type="color" value="'+colorInput+'" disabled>' +
+                  '<div class="input-group-append">' +
+                    '<button class="btn btn-primary" type="submit">-</button>' +
+                  '</div>' +
                 '</div>' +
-              '</div>' +
-            '</form>' +
-          '</div>')
+              '</form>' +
+            '</div>');
+        // $("#tfPoints").prepend(elementString);
+
+
+          console.log("ALL POINTS:");
+          // console.log($("#tfPoints"));
+          // console.log($("#tfPoints")[0]);
+          // console.log($("#tfPoints")[0].children);
+
+          // Insert new element at correct index
+          let inserted = false;
+          let insertionIndex = 0;
+          let tfPoints = [[valueInput, alphaInput, colorInput]]
+          for (let i = 0; i < $("#tfPoints")[0].children.length; i++) {
+            let formNode = $("#tfPoints")[0].children[i].children[0];
+            if (formNode.getAttribute("id") == "tfAdder"){
+              continue;
+            }
+
+            let formValue = parseFloat(formNode.children[0].children[0].value);
+            let formAlpha = parseFloat(formNode.children[0].children[1].value);
+            let formColor = formNode.children[0].children[2].value;
+            tfPoints.push([formValue, formAlpha, formColor]);
+
+            if (valueInput == formValue){
+              insertionIndex = -2;
+              break;
+            }
+            if (valueInput < formValue && !inserted){
+              insertionIndex = i;
+              inserted = true;
+            }
+          }
+          console.log(JSON.stringify(tfPoints))
+          if (insertionIndex == -2){
+            // TODO: Set invalid input
+            console.log("Point with that value already exist.")
+          }
+          // else if (insertionIndex == -1)
+          //   $("#tfPoints").prepend(elementString);
+          else{
+            let rowNode = $("#tfPoints")[0].children[insertionIndex];
+            // tfPoints.splice(insertionIndex, 0, )
+            $(elementString).insertBefore($(rowNode))
+          }
+          
         return false; //Return false to stop page from reloading
       });
 

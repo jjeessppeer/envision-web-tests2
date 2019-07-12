@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
   <!-- <link rel="stylesheet" href="tabs.css"> -->
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -47,36 +47,33 @@
             <i class="fas fa-eye"></i>
             Visualisations</a>
           <ul class="collapse list-unstyled show" id="homeSubmenu">
-            <li class="active">
+            <li id="chargeLink" class="active">
               <a href="#">Electron density</a>
             </li>
-            <li>
+            <li id="elfLink">
               <a href="#">Electron localisation function</a>
             </li>
-            <li>
+            <li id="parchgLink">
               <a href="#">Partial charge density</a>
             </li>
-            <li>
-              <a href="#">Partial charge density</a>
-            </li>
-            <li>
+            <li id="bandLink">
               <a href="#">Bandstructure</a>
             </li>
-            <li>
+            <li id="dosLink">
               <a href="#">Density of states</a>
             </li>
-            <li>
+            <li id="pcfLink">
               <a href="#">Pair correlation function</a>
             </li>
           </ul>
         </li>
-        <li>
+        <li id="parserLink">
           <a href="#">
             <i class="fas fa-pen-nib"></i>
             Parser
           </a>
         </li>
-        <li>
+        <li id="aboutLink">
           <a href="#">
             <i class="far fa-question-circle"></i>
             About
@@ -91,7 +88,7 @@
 
       <div class="container-fluid">
         <!-- Dynamic page content can go here. -->
-          <div id="fileLoadWrapper"></div>
+          <div id="loadPanelWrapper"></div>
           <div class="row row-margin">____</div>
           <div id="pageContentWrapper"></div>
 
@@ -114,15 +111,60 @@
 
 
   <script>
-    $("#fileLoadWrapper").load("loadInput.html")
-    $("#pageContentWrapper").load("chargeControlPanel.html")
-    $(document).ready(function () {
-      // Bind events
-      // $(".custom-file-input").on("change", pathInputChanged);
+    $("#loadPanelWrapper").load("loadPanel.html")
+    $("#pageContentWrapper").load("visualisationPanels/electronDensity.html")
 
-      // $("#vaspSource").css("display", "block")
-      // $("#vaspSourceCheckbox").on("change", togglePathType)
-      // $("#hdf5SourceCheckbox").on("change", togglePathType)
+    $(document).ready(function () {
+
+      // Bind link clicks to reloading part of page.
+      $("#chargeLink").on("click", function(){
+        $("li").removeClass("active");
+        $(this).addClass("active");
+        $("#loadPanelWrapper").load("loadPanel.html")
+        $("#pageContentWrapper").load("visualisationPanels/electronDensity.html")
+      });
+      $("#elfLink").on("click", function(){
+        $("li").removeClass("active");
+        $(this).addClass("active");
+        $("#loadPanelWrapper").load("loadPanel.html")
+        $("#pageContentWrapper").load("visualisationPanels/elf.html")
+      });
+      $("#parchgLink").on("click", function(){
+        $("li").removeClass("active");
+        $(this).addClass("active");
+        $("#loadPanelWrapper").load("loadPanel.html")
+        $("#pageContentWrapper").load("visualisationPanels/parchg.html")
+      });
+      $("#bandLink").on("click", function(){
+        $("li").removeClass("active");
+        $(this).addClass("active");
+        $("#loadPanelWrapper").load("loadPanel.html")
+        $("#pageContentWrapper").load("visualisationPanels/bandstructure.html");
+      });
+      $("#dosLink").on("click", function(){
+        $("li").removeClass("active");
+        $(this).addClass("active");
+        $("#loadPanelWrapper").load("loadPanel.html")
+        $("#pageContentWrapper").load("visualisationPanels/dos.html")
+      });
+      $("#pcfLink").on("click", function(){
+        $("li").removeClass("active");
+        $(this).addClass("active");
+        $("#loadPanelWrapper").load("loadPanel.html")
+        $("#pageContentWrapper").load("visualisationPanels/pcf.html")
+      });
+      $("#aboutLink").on("click", function(){
+        $("li").removeClass("active");
+        $(this).addClass("active");
+        $("#loadPanelWrapper").load("about.html")
+        $("#pageContentWrapper").load("about.html")
+      });
+      $("#parserLink").on("click", function(){
+        $("li").removeClass("active");
+        $(this).addClass("active");
+        $("#loadPanelWrapper").load("parserPanel.html")
+        $("#pageContentWrapper").load("parserPanel.html")
+      });
     });
   </script>
 

@@ -16,6 +16,7 @@
     width: 200px;
 }
 
+
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 body {
     font-family: 'Poppins', sans-serif;
@@ -78,7 +79,6 @@ a:focus {
     transition: all 0.3s;
 }
 
-
 #sidebar .sidebar-header.collapsed h3{
     display: none;
 }
@@ -87,7 +87,6 @@ a:focus {
     padding: 10px;
     background: #6d7fcc;
 }
-
 
 #sidebar ul.components {
     padding: 20px 0;

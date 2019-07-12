@@ -3,6 +3,22 @@
     margin-bottom: 5px;
 }
 
+/* .input-group-prepend.medium{
+    width: 130px;
+} */
+.input-group>.input-group-prepend.medium {
+    flex: 0 0 130px;
+}
+.input-group-prepend.medium .input-group-text {
+    width: 130px;
+}
+.input-group>.input-group-prepend.large {
+    flex: 0 0 200px;
+}
+.input-group-prepend.large .input-group-text {
+    width: 200px;
+}
+
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 body {
     font-family: 'Poppins', sans-serif;

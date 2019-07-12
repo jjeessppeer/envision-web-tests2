@@ -6,37 +6,116 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="no.css">
+  <link rel="stylesheet" href="style.css">
   <!-- <link rel="stylesheet" href="tabs.css"> -->
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
+
+
   <script>let $ = require('jquery');</script>
   <script>require('popper.js');</script>
   <script>require('bootstrap');</script>
   <script src="eventCallbacks.js"></script>
+
 </head>
 
 <body>
 
-  <div class="container-fluid">
-    <div id=fileLoadWrapper></div>
-    <div id="pageContentWrapper"></div>
+
+  <div class="wrapper">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+      <div class="sidebar-header">
+        <h3>ENVISIoN</h3>
+      </div>
+
+      <ul class="list-unstyled components">
+        <!-- <p>Visualisations</p> -->
+        <li id="visDropDown">
+          <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Visualisations</a>
+          <ul class="collapse list-unstyled show" id="homeSubmenu">
+            <li class="active">
+              <a href="#">Electron density</a>
+            </li>
+            <li>
+              <a href="#">Electron localisation function</a>
+            </li>
+            <li>
+              <a href="#">Partial charge density</a>
+            </li>
+            <li>
+              <a href="#">Partial charge density</a>
+            </li>
+            <li>
+              <a href="#">Bandstructure</a>
+            </li>
+            <li>
+              <a href="#">Density of states</a>
+            </li>
+            <li>
+              <a href="#">Pair correlation function</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">Parser</a>
+        </li>
+        <li>
+          <a href="#">About</a>
+        </li>
+      </ul>
+
+    </nav>
+
+    <!-- Page Content  -->
+    <div id="content">
+      <button type="button" id="sidebarCollapse" class="btn btn-info">
+        <i class="fas fa-align-left"></i>
+        <span>Toggle Sidebar</span>
+      </button>
+
+      <div class="container-fluid">
+        <!-- Dynamic page content can go here. -->
+          <div id="fileLoadWrapper"></div>
+          <div class="row row-margin">____</div>
+          <div id="pageContentWrapper"></div>
+
+      </div>
+
+
+    </div>
   </div>
+  <!-- 
+  <div class="container-fluid">
+    <div class="row">
+
+      <main class="col-10">
+        <div id=fileLoadWrapper></div>
+        <div id="pageContentWrapper"></div>
+      </main>
+    </div>
+
+  </div> -->
 
 
   <script>
     $("#fileLoadWrapper").load("loadInput.html")
     $("#pageContentWrapper").load("chargeControlPanel.html")
-    // $(document).ready(function () {
+    $(document).ready(function () {
 
-    //   // Bind events
-    //   $(".custom-file-input").on("change", pathInputChanged);
 
-    //   $("#vaspSource").css("display", "block")
-    //   $("#vaspSourceCheckbox").on("change", togglePathType)
-    //   $("#hdf5SourceCheckbox").on("change", togglePathType)
-    // });
+      $('#sidebarCollapse').on('click', function () {
+        $('#sidebar').toggleClass('active');
+      });
+
+      // Bind events
+      // $(".custom-file-input").on("change", pathInputChanged);
+
+      // $("#vaspSource").css("display", "block")
+      // $("#vaspSourceCheckbox").on("change", togglePathType)
+      // $("#hdf5SourceCheckbox").on("change", togglePathType)
+    });
   </script>
 
 

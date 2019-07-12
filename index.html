@@ -17,6 +17,13 @@
   <script>require('popper.js');</script>
   <script>require('bootstrap');</script>
   <script src="eventCallbacks.js"></script>
+  
+  
+  <!-- <script defer src="https://use.fontawesome.com/releases/v5.6.3/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY"
+    crossorigin="anonymous"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.6.3/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ"
+    crossorigin="anonymous"></script> -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 </head>
 
@@ -27,13 +34,18 @@
     <!-- Sidebar  -->
     <nav id="sidebar">
       <div class="sidebar-header">
-        <h3>ENVISIoN</h3>
+        <h3>ENVISI<i class="fas fa-atom"></i>N</h3>
+      </div>
+      <div class="sidebar-header collapsed">
+          <h3><i class="fas fa-atom"></i></h3>
       </div>
 
       <ul class="list-unstyled components">
         <!-- <p>Visualisations</p> -->
         <li id="visDropDown">
-          <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Visualisations</a>
+          <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+            <i class="fas fa-eye"></i>
+            Visualisations</a>
           <ul class="collapse list-unstyled show" id="homeSubmenu">
             <li class="active">
               <a href="#">Electron density</a>
@@ -59,10 +71,16 @@
           </ul>
         </li>
         <li>
-          <a href="#">Parser</a>
+          <a href="#">
+            <i class="fas fa-pen-nib"></i>
+            Parser
+          </a>
         </li>
         <li>
-          <a href="#">About</a>
+          <a href="#">
+            <i class="far fa-question-circle"></i>
+            About
+          </a>
         </li>
       </ul>
 
@@ -70,10 +88,6 @@
 
     <!-- Page Content  -->
     <div id="content">
-      <button type="button" id="sidebarCollapse" class="btn btn-info">
-        <i class="fas fa-align-left"></i>
-        <span>Toggle Sidebar</span>
-      </button>
 
       <div class="container-fluid">
         <!-- Dynamic page content can go here. -->
@@ -103,12 +117,6 @@
     $("#fileLoadWrapper").load("loadInput.html")
     $("#pageContentWrapper").load("chargeControlPanel.html")
     $(document).ready(function () {
-
-
-      $('#sidebarCollapse').on('click', function () {
-        $('#sidebar').toggleClass('active');
-      });
-
       // Bind events
       // $(".custom-file-input").on("change", pathInputChanged);
 
